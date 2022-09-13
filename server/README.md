@@ -34,7 +34,7 @@ Este é um projeto em desenvolvimento e ainda conta com melhorias e o incremento
 Utiliza as seguintes bibliotecas de suporte:
 
 - Express
-- 
+- Typescript
 - 
 
 ## 🖥 Contribuindo ou testando localmente 
