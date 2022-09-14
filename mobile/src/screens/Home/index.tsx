@@ -1,4 +1,4 @@
-import { View, Image } from 'react-native';
+import { View, Image, FlatList } from 'react-native';
 
 import { Heading } from '../../components/Heading';
 import { GameCard } from '../../components/GameCard';
@@ -22,9 +22,19 @@ export function Home() {
         subtitle="Selecione o jogo que quer jogar..." 
       />
 
-      <GameCard 
-        data={GAMES[0]}
+      <FlatList
+        contentContainerStyle={styles.contentList}
+        data={GAMES}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <GameCard 
+            data={item}
+          />
+        )}
+        showsHorizontalScrollIndicator={false}
+        horizontal
       />
+
     </View>
   );
 }
