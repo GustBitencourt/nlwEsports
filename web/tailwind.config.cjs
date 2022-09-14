@@ -6,9 +6,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      },
       backgroundImage: {
-        galaxy: "url('/background.png')"
-      }
+        galaxy: "url('/background.png')",
+        'nlw-gradient': 'linear-gradient(89.86deg, #9572FC 29%, #43E7AD 90%)',
+        'game-gradient': 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 67.88%%)'
+      },
     },
   },
   plugins: [],
