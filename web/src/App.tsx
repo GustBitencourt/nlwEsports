@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { MagnifyingGlassPlus } from 'phosphor-react';
 
 import LogoImage from './assets/images/Logo.svg'
@@ -6,8 +7,29 @@ import game2 from './assets/images/CapaJogo2.png'
 import game3 from './assets/images/CapaJogo3.png'
 
 import './styles/main.css';
+import { GameBanner } from './components/GameBanner';
+
+interface Game {
+  id: string;
+  title: string;
+  bannerUrl: string;
+  _count: {
+    ads: number;
+  }
+}
 
 function App() {
+  const url = 'http://localhost:3333';
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    fetch(`${url}/games`)
+      .then(response => response.json())
+      .then(data => {
+        setGames(data)
+      }) 
+
+  }, [])
   return (
     <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
       <img src={LogoImage} alt="Logo nlw esports" />
@@ -17,49 +39,17 @@ function App() {
       </h1>
 
       <div className="grid grid-cols-6 gap-6 mt-16">
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game1} alt="capa jogo" />
-
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game2} alt="capa jogo" />
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game3} alt="capa jogo" />
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game1} alt="capa jogo" />
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game2} alt="capa jogo" />
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
-        <a href="" className='relative rounded-lg overflow-hidden'>
-          <img src={game3} alt="capa jogo" />
-          <div className="w-full pt-16 pb-4 px-4 bg-game-gradient absolute bottom-0 left-0 right-0">
-            <strong className="font-bold block">Game Name Title</strong>
-            <span className="text-zinc-300 text-sm block">X Anuncios</span>
-          </div>
-        </a>
+        {
+          games.map(game => {
+            return (
+              <GameBanner
+                key={game.id}
+                bannerUrl={game.bannerUrl} 
+                title={game.title} 
+                ads={game._count.ads} />
+            )
+          })
+        }
       </div>
 
       <div className="pt-1 bg-nlw-gradient self-stretch rounded-lg mt-8 overflow-hidden">
