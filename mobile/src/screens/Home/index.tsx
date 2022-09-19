@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, Image, FlatList } from 'react-native';
+import { Image, FlatList } from 'react-native';
+import { SafeAreaView} from 'react-native-safe-area-context';
 
 import { Heading } from '../../components/Heading';
 import { GameCard, GameCardProps } from '../../components/GameCard';
@@ -7,7 +8,7 @@ import { GameCard, GameCardProps } from '../../components/GameCard';
 import { styles } from './styles';
 import logoImg from '../../assets/logo-nlw-esports.png';
 
-import { GAMES } from '../../utils/games';
+
 
 
 export function Home() {
@@ -19,7 +20,7 @@ export function Home() {
     .then(data => setGames(data))
   }, [])
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image 
         source={logoImg} 
         style={styles.logo}     
@@ -43,6 +44,6 @@ export function Home() {
         horizontal
       />
 
-    </View>
+    </SafeAreaView>
   );
 }
