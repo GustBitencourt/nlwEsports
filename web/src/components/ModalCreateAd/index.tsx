@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { Check, GameController } from "phosphor-react";
 import { Input } from "../Input";
+import axios from "axios";
 
 interface Game {
     id: string;
@@ -14,12 +15,41 @@ export default function ModalCreateAd() {
     const url = "http://localhost:3333";
     const [games, setGames] = useState<Game[]>([]);
     const [weekDays, setWeekDays] = useState<string[]>([]);
+    const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false);
+
+    async function handleCreateAd(event: FormEvent) {        
+        event.preventDefault();
+
+        const formData = new FormData(event.target as HTMLFormElement);
+        const data = Object.fromEntries(formData);
+
+        if(!data.name) {
+            return
+        }
+
+        try {
+            await axios.post(`${url}/games/${data.game}/ads`, {
+                name: data.name,
+                yearsPlaying: Number(data.yearsPlaying),
+                discord: data.discord,
+                weekDays: weekDays.map(Number),
+                hourStart: data.hourStart,
+                hourEnd: data.hourEnd,
+                useVoiceChannel: useVoiceChannel
+            })
+
+            alert('Anuncio criado com sucesso')
+
+        } catch (error) {
+            console.log(error);
+            alert('Error, não foi possivel publicar anúncio');            
+        }
+    }
 
     useEffect(() => {
-        fetch(`${url}/games`)
-            .then((response) => response.json())
-            .then((data) => {
-                setGames(data);
+        axios(`${url}/games`)
+            .then((response) => {
+                setGames(response.data);
             });
     }, []);
 
@@ -32,7 +62,10 @@ export default function ModalCreateAd() {
                     Publique um Anúncio
                 </Dialog.Title>
 
-                <form className="mt-8 flex flex-col gap-4">
+                <form 
+                    className="mt-8 flex flex-col gap-4"
+                    onSubmit={handleCreateAd}
+                >
                     <div className="flex flex-col gap-2">
                         <label htmlFor="game" className="font-semibold">
                             Qual o game?
@@ -40,6 +73,7 @@ export default function ModalCreateAd() {
                         <select
                             className="bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none"
                             id="game"
+                            name="game"
                             defaultValue=""
                         >
                             <option disabled>
@@ -57,7 +91,7 @@ export default function ModalCreateAd() {
 
                     <div className="flex flex-col gap-2">
                         <label htmlFor="name">Nome ou nickname</label>
-                        <Input id="name" placeholder="nickgame no jogo" />
+                        <Input id="name" name="name" placeholder="nickgame no jogo" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
@@ -66,13 +100,14 @@ export default function ModalCreateAd() {
                             <Input
                                 type="number"
                                 id="yearsPlaying"
+                                name="yearsPlaying"
                                 placeholder="Tudo bem ser 0"
                             />
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <label htmlFor="discord">Discord</label>
-                            <Input id="discord" placeholder="Usuário#0000" />
+                            <Input id="discord" name="discord" placeholder="Usuário#0000" />
                         </div>
                     </div>
 
@@ -142,14 +177,25 @@ export default function ModalCreateAd() {
                             <label htmlFor="hourStart">Horário Disponível</label>
 
                             <div className="grid grid-cols-2 gap-2">
-                                <Input id="hourStart" type="time" placeholder="De" />
-                                <Input id="hourEnd" type="time" placeholder="Até" />
+                                <Input name="hourStart" id="hourStart" type="time" placeholder="De" />
+                                <Input name="hourEnd" id="hourEnd" type="time" placeholder="Até" />
                             </div>
                         </div>
                     </div>
 
                     <label className="mt-2 flex gap-2 text-sm items-center">
-                        <Checkbox.Root className="w-6 h-6 p-1 rounded bg-zinc-900">
+                        <Checkbox.Root 
+                            className="w-6 h-6 p-1 rounded bg-zinc-900"
+                            checked={useVoiceChannel}
+                            onCheckedChange={(checked) => {
+                                if(checked === true) {
+                                    setUseVoiceChannel(true)
+
+                                } else {
+                                    setUseVoiceChannel(false)
+                                }
+                            }}
+                        >
                             <Checkbox.Indicator>
                                 <Check className="w-4 h-4 text-emerald-400" />
                             </Checkbox.Indicator>

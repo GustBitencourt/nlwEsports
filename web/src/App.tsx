@@ -7,6 +7,7 @@ import ModalCreateAd from './components/ModalCreateAd';
 import LogoImage from './assets/images/Logo.svg'
 import './styles/main.css';
 import { CreateAdPostBanner } from './components/CreateAdPostBanner';
+import axios from 'axios';
 
 
 interface Game {
@@ -23,14 +24,13 @@ function App() {
   const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
-    fetch(`${url}/games`)
-      .then(response => response.json())
-      .then(data => {
-        setGames(data)
+    axios(`${url}/games`)
+      .then(response => {
+        setGames(response.data)
       })
 
   }, [])
-  
+
   return (
     <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
       <img src={LogoImage} alt="Logo nlw esports" />
