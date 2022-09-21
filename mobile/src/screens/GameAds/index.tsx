@@ -18,7 +18,8 @@ import { THEME } from '../../theme';
 
 export function GameAdsScreen() {
     const [ads, setAds] = useState<AdsCardProps[]>([]);
-    const [modalOpen, setModalOpen] = useState('Tunts#0000');
+    //usada pra pegar o discord e abrir o modal de informação do Ad
+    const [getDiscord, setGetDiscord] = useState('');
 
     const navigation = useNavigation()
     const route = useRoute();
@@ -26,6 +27,13 @@ export function GameAdsScreen() {
 
     function handleGoBack() {
         navigation.goBack();
+    }
+
+    async function getDiscordUser(adsId: string) {
+        fetch(`http://192.168.15.23:3333/ads/${adsId}/discord`)
+            .then(response => response.json())
+            .then(data => setGetDiscord(data.discord))
+        
     }
 
     useEffect(() => {
@@ -71,7 +79,7 @@ export function GameAdsScreen() {
                     renderItem={({ item }) => (
                         <AdsCard 
                             data={item} 
-                            onConnect={() => {}}
+                            onConnect={() => getDiscordUser(item.id)}
                         />
                     )}
                     horizontal
@@ -86,9 +94,9 @@ export function GameAdsScreen() {
                 />
 
                 <ModalCreateAd 
-                    visible={modalOpen.length > 0}
-                    discord="Tunts#0000"
-                    onClose={() => setModalOpen('')}
+                    visible={getDiscord.length > 0}
+                    discord={getDiscord}
+                    onClose={() => setGetDiscord('')}
                 />
             </SafeAreaView>
         </Background>

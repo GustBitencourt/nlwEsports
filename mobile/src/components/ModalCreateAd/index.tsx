@@ -15,6 +15,7 @@ interface Props extends ModalProps {
 export function ModalCreateAd({ discord, onClose, ...rest }:Props) {
   return (
     <Modal
+        animationType='fade'
         transparent
         statusBarTranslucent
         {...rest}
