@@ -1,4 +1,6 @@
-import { View, Modal, ModalProps, Text, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { View, Modal, ModalProps, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 import { MaterialIcons } from '@expo/vector-icons'
 import { CheckCircle } from 'phosphor-react-native';
@@ -12,7 +14,17 @@ interface Props extends ModalProps {
     onClose: () => void;
 }
 
-export function ModalCreateAd({ discord, onClose, ...rest }:Props) {
+export function ModalAd({ discord, onClose, ...rest }:Props) {
+    const [isCopping, setIsCopping] = useState(false)
+
+    async function handleCopyDiscordUserClipBoard() {
+        setIsCopping(true);
+        await Clipboard.setStringAsync(discord)
+        
+        Alert.alert('Discord copiado!', 'Discord copiado para área de transferencia')
+        setIsCopping(false);
+        
+    }
   return (
     <Modal
         animationType='fade'
@@ -49,9 +61,13 @@ export function ModalCreateAd({ discord, onClose, ...rest }:Props) {
                     Adicione seu discord
                 </Text>
 
-                <TouchableOpacity style={styles.discordButton}>
+                <TouchableOpacity 
+                    style={styles.discordButton}
+                    onPress={handleCopyDiscordUserClipBoard}
+                    disabled={isCopping}
+                >
                     <Text style={styles.discord}>
-                        {discord}
+                        {isCopping ? <ActivityIndicator color={THEME.COLORS.PRIMARY} /> : discord}
                     </Text>
                 </TouchableOpacity>
             </View>

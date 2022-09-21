@@ -5,7 +5,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 
 import { Heading } from '../../components/Heading';
 import { AdsCard, AdsCardProps } from '../../components/AdsCard';
-import { ModalCreateAd } from '../../components/ModalCreateAd';
+import { ModalAd } from '../../components/ModalAd';
 
 import { Entypo } from "@expo/vector-icons"
 import { Background } from '../../components/Background';
@@ -93,7 +93,7 @@ export function GameAdsScreen() {
                     )}
                 />
 
-                <ModalCreateAd 
+                <ModalAd 
                     visible={getDiscord.length > 0}
                     discord={getDiscord}
                     onClose={() => setGetDiscord('')}
