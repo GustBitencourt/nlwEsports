@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, Image, TouchableOpacity, View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
 import { Heading } from '../../components/Heading';
 import { AdsCard, AdsCardProps } from '../../components/AdsCard';
+import { ModalCreateAd } from '../../components/ModalCreateAd';
 
 import { Entypo } from "@expo/vector-icons"
 import { Background } from '../../components/Background';
@@ -17,6 +18,7 @@ import { THEME } from '../../theme';
 
 export function GameAdsScreen() {
     const [ads, setAds] = useState<AdsCardProps[]>([]);
+    const [modalOpen, setModalOpen] = useState('Tunts#0000');
 
     const navigation = useNavigation()
     const route = useRoute();
@@ -83,6 +85,11 @@ export function GameAdsScreen() {
                     )}
                 />
 
+                <ModalCreateAd 
+                    visible={modalOpen.length > 0}
+                    discord="Tunts#0000"
+                    onClose={() => setModalOpen('')}
+                />
             </SafeAreaView>
         </Background>
     );
