@@ -22,11 +22,11 @@ export default function App() {
 
   useEffect(() => {
     getNotificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification);
+      console.log("Notificação de push => ",notification);
     });
 
     responseNotificationListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      console.log("Response de Notificação de push => ",response);
     });
 
     return () => {
